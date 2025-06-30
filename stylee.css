@@ -1,0 +1,306 @@
+/* Card border styles */
+.card.process-card {
+  border: 3px solid violet;
+}
+
+.card.algorithm-card {
+  border: 3px solid green;
+}
+
+.card.results-card {
+  border: 3px solid orange;
+}
+
+.card.summary-card {
+  border: 3px solid magenta;
+}
+
+/* Background Video Styles */
+#bgVideo {
+  position: fixed;
+  top: 0;
+  left: 0;
+  min-width: 100vw;
+  min-height: 100vh;
+  object-fit: cover;
+  z-index: -1;
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* 3D Button Press Animation */
+.btn-3d {
+  transition: all 0.2s ease;
+  transform: perspective(300px);
+  transform-style: preserve-3d;
+}
+
+.btn-3d:active {
+  transform: perspective(300px) translateY(2px) scale(0.98);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3) inset;
+}
+
+/* Results + Animation Side by Side */
+.results-wrapper {
+  display: flex;
+  gap: 15px;
+  align-items: flex-start;
+}
+
+/* Responsive: stack on small screens */
+@media (max-width: 767.98px) {
+  .simulator-header {
+    background: linear-gradient(90deg, violet, indigo);
+    padding: 30px 0;
+    text-align: center;
+    border-bottom: 3px solid #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  }
+
+  .simulator-title {
+    font-size: 10rem;
+    font-weight: bold;
+    color: white;
+    margin: 0;
+  }
+}
+
+
+.simulator-header {
+  background: linear-gradient(90deg, violet, indigo);
+  padding: 30px 0;
+  text-align: center;
+  border-bottom: 3px solid #fff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.simulator-title {
+  font-size: 4rem;
+  font-weight: bold;
+  color: white;
+  margin: 0;
+}
+
+.violet-gradient-container {
+  background: linear-gradient(135deg, violet, indigo);
+  color: white !important;
+  border: none !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.violet-gradient-container h5,
+.violet-gradient-container label,
+.violet-gradient-container th,
+.violet-gradient-container td,
+.violet-gradient-container input,
+.violet-gradient-container select,
+.violet-gradient-container button {
+  color: white !important;
+  border-color: white !important;
+}
+
+.violet-gradient-container input,
+.violet-gradient-container select {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Inputs inside violet containers */
+.violet-gradient-container input,
+.violet-gradient-container select {
+  background-color: rgba(0, 0, 0, 0.3); /* darker transparent bg */
+  color: white !important;
+  border: 1px solid white;
+}
+
+.violet-gradient-container input::placeholder,
+.violet-gradient-container select option {
+  color: #dddddd;
+}
+
+/* Table header & cells */
+.violet-gradient-container table thead th {
+  background-color: rgba(255, 255, 255, 0.15);
+  color: white;
+}
+
+.violet-gradient-container table tbody td {
+  background-color: rgba(255, 255, 255, 0.08);
+  color: white;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Fix button visibility */
+.violet-gradient-container button {
+  background-color: rgba(255, 255, 255, 0.15);
+  color: white !important;
+  border: 1px solid white;
+}
+
+.summary-side-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 20px;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+/* Make sure canvas and summary align side by side */
+#ganttChart {
+  flex-grow: 2;
+  max-width: 100%;
+}
+
+.gantt-summary-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.gantt-chart-container {
+  flex-grow: 2;
+  min-width: 60%;
+}
+
+.summary-card {
+  flex-shrink: 0;
+}
+
+/* Make input fields more readable in violet containers */
+/* Black text inside violet gradient containers */
+.violet-gradient-container,
+.violet-gradient-container h5,
+.violet-gradient-container label,
+.violet-gradient-container th,
+.violet-gradient-container td,
+.violet-gradient-container input,
+.violet-gradient-container select,
+.violet-gradient-container button {
+  color: black !important;
+  border-color: black !important;
+}
+
+/* Input backgrounds and placeholders */
+.violet-gradient-container input,
+.violet-gradient-container select {
+  background-color: rgba(255, 255, 255, 0.8);
+  font-weight: 500;
+}
+
+.violet-gradient-container input::placeholder {
+  color: rgba(0, 0, 0, 0.5);
+}
+
+/* Table headers and cells */
+.violet-gradient-container table thead th {
+  background-color: rgba(255, 255, 255, 0.9);
+  color: black;
+}
+
+.violet-gradient-container table tbody td {
+  background-color: rgba(255, 255, 255, 0.7);
+  color: black;
+  border-color: rgba(0, 0, 0, 0.2);
+}
+
+/* Buttons */
+.violet-gradient-container button {
+  background-color: rgba(255, 255, 255, 0.7);
+  color: black !important;
+  border: 1px solid black;
+}
+
+/* General animation for all buttons */
+button {
+  transition: all 0.2s ease-in-out;
+  transform-style: preserve-3d;
+}
+
+/* Existing 3D press effect */
+.btn-3d:active {
+  transform: scale(0.97) translateY(2px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3) inset;
+}
+
+/* Add hover lift animation */
+button:hover {
+  transform: scale(1.03);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+/* Dropdown select text & option fix */
+.violet-gradient-container select,
+.violet-gradient-container select option {
+  color: black !important;
+  background-color: rgba(255, 255, 255, 0.9) !important;
+  font-weight: 500;
+}
+
+/* Optional: hover/focus effect on select */
+.violet-gradient-container select:focus {
+  border-color: black;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+/* Green gradient for Add, Calculate, Reset buttons */
+#btnAddProcess,
+#btnCalculate,
+#btnReset {
+  background: linear-gradient(to right, #28a745, #218838);
+  border: none;
+  color: white !important;
+  font-weight: 500;
+}
+
+#btnAddProcess:hover,
+#btnCalculate:hover,
+#btnReset:hover {
+  background: linear-gradient(to right, #218838, #1e7e34);
+}
+/* Rounded corners for all cards/containers */
+.card {
+  border-radius: 18px !important;
+}
+
+body {
+  background: linear-gradient(to bottom right, #000000, #4f4f4f);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.footer-back-btn {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 1000;
+}
+
+.btn-back:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.4);
+}
+.back-button-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
+  margin-bottom: 30px;
+}
+
+.btn-back {
+  background: linear-gradient(to right, #28a745, #218838);
+  color: white;
+  border: none;
+  padding: 8px 20px;
+  font-weight: bold;
+  font-size: 1rem;
+  border-radius: 10px;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.btn-back:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.4);
+}

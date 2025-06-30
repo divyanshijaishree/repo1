@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CPU Scheduling Simulator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+        
+        .hero-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .feature-card {
+            transition: all 0.3s ease;
+        }
+        
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+        /* Dark theme overrides */
+body.dark {
+    background: #111827; /* slate-900 */
+    color: #f3f4f6;       /* gray-100 */
+}
+
+.dark nav,
+.dark footer,
+.dark .hero-gradient {
+    background-color: #1f2937 !important; /* gray-800 */
+    color: white;
+}
+
+.dark .feature-card {
+    background-color: #374151 !important; /* gray-700 */
+    color: #f9fafb;
+}
+
+.dark input,
+.dark button,
+.dark .btn-glow {
+    background-color: #4b5563;
+    color: white;
+}
+
+.dark a {
+    color: #cbd5e1;
+}
+
+.dark .hover\:text-indigo-600:hover {
+    color: #818cf8;
+}
+
+        
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @keyframes pop-in {
+    0% {
+        opacity: 0;
+        transform: translateY(-50px) scale(0.8);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.animate-in {
+    animation: pop-in 0.6s ease-out forwards;
+}
+
+        
+        .btn-glow {
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.7);
+        }
+        
+        .btn-glow:hover {
+            box-shadow: 0 0 25px rgba(99, 102, 241, 0.9);
+        }
+    </style>
+</head>
+<body>
+    <button id="themeToggle" title="Toggle Dark Mode"
+    class="fixed top-4 right-4 bg-white text-black px-3 py-2 rounded-full shadow z-50 hover:bg-gray-200 transition">
+    🌓
+</button>
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex justify-between">
+                <div class="flex space-x-7">
+                    <div>
+                        <a href="#" class="flex items-center py-4 px-2">
+                            <span class="text-indigo-600 text-2xl font-semibold">Compile and Debugg!!!</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="hidden md:flex items-center space-x-3">
+                    <a href="#" class="py-4 px-2 text-gray-500 font-semibold hover:text-indigo-600 transition duration-300">Home</a>
+                    <a href="code (4).html" class="py-4 px-2 text-gray-500 font-semibold hover:text-indigo-600 transition duration-300">Channels</a>
+                    <a href="code (5).html" class="py-4 px-2 text-gray-500 font-semibold hover:text-indigo-600 transition duration-300">FlowLearn</a>
+                    <a href="https://wiki.archlinux.org/title/Ollama" class="py-4 px-2 text-gray-500 font-semibold hover:text-indigo-600 transition duration-300">About</a>
+                    <a href="code (3).html" class="py-4 px-2 text-gray-500 font-semibold hover:text-indigo-600 transition duration-300">Contact</a>
+                </div>
+                <div class="md:hidden flex items-center">
+                    <button class="outline-none mobile-menu-button">
+                        <svg class="w-6 h-6 text-gray-500" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+                            <path d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-gradient text-white py-20">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 flex flex-col justify-center">
+                    <h1 class="text-4xl md:text-6xl font-bold leading-tight mb-4">AI Powered Code Compiler</h1>
+                    <p class="text-xl md:text-2xl mb-8">AI That Compiles and Diagnoses Your Code Like a Mentor, Not Just a Machine</p>
+                    <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+                        <button id="getStartedBtn" class="bg-white text-indigo-600 px-8 py-3 rounded-full font-bold hover:bg-gray-100 transition duration-300 btn-glow">Get Started</button>
+                        <a href="https://www.geeksforgeeks.org/blogs/top-ai-powered-software-testing-tools/" target="_blank">
+  <button class="border-2 border-white px-8 py-3 rounded-full font-bold hover:bg-white hover:text-indigo-600 transition duration-300">
+    Learn More
+  </button>
+</a>
+                    </div>
+                </div>
+                <div class="md:w-1/2 mt-12 md:mt-0 flex justify-center">
+                    <div id="heroAnimationContainer" class="relative hidden">
+    <img src="learning_4829774.png" alt="Hero Image" class="w-64 h-64 floating z-10 relative">
+    <div id="speechBubble" class="absolute top-0 left-full ml-4 bg-white text-indigo-600 px-4 py-2 rounded-lg shadow-lg opacity-0 transition-opacity duration-500 text-base font-semibold min-w-[250px]">
+    Hi, how may I assist you?
+    <div class="mt-6 flex space-x-4">
+    <input type="text" id="userTextInput" placeholder="Type your query..." class="px-4 py-2 rounded-lg shadow border w-72 text-gray-800">
+    <button id="textSubmitBtn" class="bg-indigo-600 text-white px-4 py-2 rounded-lg shadow hover:bg-indigo-700 transition">
+        Submit
+    </button>
+</div>
+
+</div>
+
+</div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-bold text-center text-gray-800 mb-16">What is in your mind?🤔</h2>
+            <div class="flex flex-col md:flex-row md:-mx-3">
+                <div class="px-3 md:w-1/3 mb-8">
+    <a href="https://www.browserstack.com/guide/ai-debugging-tools">
+        <div id="learnBox" class="p-6 rounded-lg shadow-lg bg-white feature-card cursor-pointer hover:shadow-xl">
+            <div class="text-indigo-600 mb-4">
+                <i class="fas fa-bolt text-4xl"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-800 mb-2">Learn Testing Tools</h3>
+            <p class="text-gray-600">Click here to explore the top AI-powered low-code debugging tools for efficient testing. Boost productivity with these innovative solutions.</p>
+        </div>
+    </a>
+</div>
+
+                <div class="px-3 md:w-1/3 mb-8">
+                    <a href="code (1).html">
+                        <div id="solveBox" class="p-6 rounded-lg shadow-lg bg-white feature-card cursor-pointer hover:shadow-xl">
+                            <div class="text-indigo-600 mb-4">
+                                 <i class="fas fa-shield-alt text-4xl"></i>
+                        </div>
+            <h3 class="text-2xl font-bold text-gray-800 mb-2">Learn Smartly</h3>
+            <p class="text-gray-600">Here you can solve various techniques and management for this AI-Powered Compiler.</p>
+        </div>
+    </a>
+</div>
+
+                <div class="px-3 md:w-1/3 mb-8">
+                    <a href="simulator.html">
+                       <div id="simulateBox" class="p-6 rounded-lg shadow-lg bg-white feature-card cursor-pointer hover:shadow-xl">
+                            <div class="text-indigo-600 mb-4">
+                                <i class="fas fa-cogs text-4xl"></i>
+                        </div>
+            <h3 class="text-2xl font-bold text-gray-800 mb-2">Simulator</h3>
+            <p class="text-gray-600">Here you can simulate your AI Powered Code Compiler and Debugging System.</p>
+        </div>
+    </a>
+</div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="py-20 bg-gray-100">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="text-center md:text-left mb-10 md:mb-0">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-2">Trusted by thousands</h2>
+                    <p class="text-gray-600">Join our growing platform to learn more & more</p>
+                </div>
+                <div class="flex flex-col md:flex-row">
+                    <div class="text-center px-6 py-4">
+                        <h3 class="text-4xl font-bold text-indigo-600 mb-2">10K+</h3>
+                        <p class="text-gray-600">Active Users</p>
+                    </div>
+                    <div class="text-center px-6 py-4">
+                        <h3 class="text-4xl font-bold text-indigo-600 mb-2">99.9%</h3>
+                        <p class="text-gray-600">Updated Topics</p>
+                    </div>
+                    <div class="text-center px-6 py-4">
+                        <h3 class="text-4xl font-bold text-indigo-600 mb-2">24/7</h3>
+                        <p class="text-gray-600">Support</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-20 bg-indigo-600 text-white">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-4xl font-bold mb-6">Ready to get started?</h2>
+            <p class="text-xl mb-8">Join thousands of satisfied learners everyday</p>
+            <a href="index.html#register" class="bg-white text-indigo-600 px-8 py-4 rounded-full font-bold hover:bg-gray-100 transition duration-300 btn-glow inline-block text-center">Sign Up Now</a>
+
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between">
+                <div class="mb-8 md:mb-0">
+                    <h3 class="text-2xl font-bold mb-4">DGV Platform</h3>
+                    <p class="text-gray-400">The best solution for your education purpose.</p>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-8">
+                    <div>
+                        <h4 class="text-lg font-semibold mb-4">Materials</h4>
+                        <ul class="space-y-2">
+                            <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Features</a></li>
+                            <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Pricing</a></li>
+                            <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Documentation</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-semibold mb-4">Developers</h4>
+                        <ul class="space-y-2">
+                            <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">About</a></li>
+                            <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Careers</a></li>
+                            <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Blog</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-semibold mb-4">Legal</h4>
+                        <ul class="space-y-2">
+                            <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Privacy</a></li>
+                            <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Terms</a></li>
+                            <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Cookie Policy</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-400 mb-4 md:mb-0">© 2025 Site. All rights reserved.</p>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-white transition duration-300"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-white transition duration-300"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-white transition duration-300"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-white transition duration-300"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Theme Toggle
+const themeToggle = document.getElementById("themeToggle");
+const body = document.body;
+
+// Load previously saved theme (if any)
+if (localStorage.getItem("theme") === "dark") {
+    body.classList.add("dark");
+}
+
+// Toggle on click
+themeToggle.addEventListener("click", () => {
+    body.classList.toggle("dark");
+
+    // Save preference
+    if (body.classList.contains("dark")) {
+        localStorage.setItem("theme", "dark");
+    } else {
+        localStorage.setItem("theme", "light");
+    }
+});
+
+        
+        // Mobile menu toggle
+        const mobileMenuButton = document.querySelector('.mobile-menu-button');
+        const mobileMenu = document.querySelector('.mobile-menu');
+        
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Animation for feature cards on scroll
+        const featureCards = document.querySelectorAll('.feature-card');
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = 1;
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        featureCards.forEach(card => {
+            card.style.opacity = 0;
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'all 0.5s ease';
+            observer.observe(card);
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+const recognition = new SpeechRecognition();
+
+recognition.lang = "hi-IN"; // Hindi recognition
+recognition.interimResults = false;
+recognition.maxAlternatives = 1;
+
+// Voice reply mapping
+function speakFeedback(text) {
+    const response = new SpeechSynthesisUtterance(text);
+    response.lang = "en-US";
+    response.pitch = 1;
+    response.rate = 1;
+    speechSynthesis.speak(response);
+}
+
+function handleTextCommand(command) {
+    command = command.toLowerCase();
+    console.log("User typed:", command);
+
+    const learnKeywords = ["learn", "algorithm", "study"];
+    const solveKeywords = ["solve", "numerical", "question"];
+    const simulateKeywords = ["simulate", "simulation", "run"];
+
+    const includesAny = (keywords) => keywords.some(keyword => command.includes(keyword));
+
+    if (includesAny(learnKeywords)) {
+        speakFeedback("Opening Learn Algorithms page");
+        setTimeout(() => {
+            window.location.href = "code (2).html";
+        }, 1500);
+    } else if (includesAny(solveKeywords)) {
+        speakFeedback("Opening Solve Numericals page");
+        setTimeout(() => {
+            window.location.href = "code (1).html";
+        }, 1500);
+    } else if (includesAny(simulateKeywords)) {
+        speakFeedback("Opening Simulator page");
+        setTimeout(() => {
+            window.location.href = "simulator.html";
+        }, 1500);
+    } else {
+        speakFeedback("Sorry, I didn't understand. Please try again.");
+        alert("Sorry, I didn't understand. Please try again.");
+    }
+}
+
+
+document.getElementById("textSubmitBtn").addEventListener("click", () => {
+    const input = document.getElementById("userTextInput").value.trim();
+    if (input.length > 0) {
+        handleTextCommand(input);
+    }
+});
+
+document.getElementById("userTextInput").addEventListener("keydown", function (event) {
+    if (event.key === "Enter") {
+        event.preventDefault(); // Prevent default form action (like page reload)
+        document.getElementById("textSubmitBtn").click(); // Trigger the same function as button click
+    }
+});
+
+        // Voice speaking logic for floating image
+        document.getElementById("getStartedBtn").addEventListener("click", () => {
+    // Voice
+    const msg = new SpeechSynthesisUtterance("Hi, how may I assist you?");
+    msg.lang = "en-US";
+    msg.pitch = 1;
+    msg.rate = 1;
+    speechSynthesis.speak(msg);
+    // Show animated image and bubble
+    const container = document.getElementById("heroAnimationContainer");
+    const bubble = document.getElementById("speechBubble");
+
+    container.classList.remove("hidden");
+    container.classList.add("animate-in");
+
+    // Delay bubble to sync with speech
+    setTimeout(() => {
+        bubble.style.opacity = 1;
+    }, 600);
+    setTimeout(() => {
+        recognition.start();
+    }, 2000);
+});
+
+// When voice is detected
+recognition.onresult = function(event) {
+    const userSpeech = event.results[0][0].transcript;
+    console.log("User said:", userSpeech);
+    handleVoiceCommand(userSpeech);
+};
+
+recognition.onerror = function(event) {
+    console.error("Speech recognition error:", event.error);
+};
+
+    </script>
+
+</body>
+</html>

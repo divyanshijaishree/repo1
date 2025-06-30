@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI Speech-to-Code</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Orbitron', sans-serif;
+      background: radial-gradient(ellipse at bottom, #050505 0%, #000000 100%);
+      color: white;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+  
+    spline-viewer {
+      position: fixed;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 400px;
+      height: 400px;
+      opacity: 0.9;
+      z-index: 1;
+      filter: drop-shadow(0 0 30px #00eaff);
+      pointer-events: none;
+    }
+
+    .frame {
+      position: relative;
+      margin-left: 440px;
+      padding: 30px;
+      border: 3px solid rgba(255, 255, 255, 0.2);
+      border-radius: 30px;
+      backdrop-filter: blur(15px);
+      box-shadow: 0 0 25px rgba(255, 255, 255, 0.3), 0 0 60px #00eaff44;
+      background: rgba(5, 5, 5, 0.4);
+      max-width: 800px;
+      width: 90%;
+      margin-top: 40px;
+      z-index: 2;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 25px;
+      background: linear-gradient(90deg, #ffb6ff, #ff00ff, #ffb6ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 10px #ff69f2, 0 0 20px #ff00ff;
+      animation: crystalGlow 3s infinite ease-in-out;
+      text-align: center;
+    }
+
+    @keyframes crystalGlow {
+      0% { text-shadow: 0 0 10px #ffad69; }
+      50% { text-shadow: 0 0 25px #ff00ff, 0 0 35px #ff69f2; }
+      100% { text-shadow: 0 0 10px #ff69f2; }
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: center;
+      margin: 20px 0;
+    }
+
+    button {
+      padding: 12px 25px;
+      font-size: 1.1rem;
+      border: none;
+      border-radius: 10px;
+      background: #00eaff;
+      color: #000;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 20px rgba(0, 234, 255, 0.7);
+      position: relative;
+      overflow: hidden;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 30px #00eaff;
+    }
+
+    button:active::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      right: -50%;
+      bottom: -50%;
+      background: radial-gradient(circle, rgba(255,0,255,0.4) 0%, transparent 70%);
+      animation: purplePulse 0.4s ease-out;
+    }
+
+    @keyframes purplePulse {
+      0% { transform: scale(0.5); opacity: 1; }
+      100% { transform: scale(1.5); opacity: 0; }
+    }
+
+    .language-selector-container {
+      display: flex;
+      justify-content: center;
+      margin: 15px 0;
+    }
+
+    #language {
+      padding: 10px 20px;
+      font-size: 1rem;
+      border-radius: 10px;
+      background: #112b3c;
+      border: 2px solid #00eaff55;
+      color: white;
+      font-family: 'Orbitron', sans-serif;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    #language:hover {
+      border-color: #00eaff;
+      box-shadow: 0 0 15px #00eaff44;
+    }
+
+    textarea {
+      width: 100%;
+      height: 250px;
+      padding: 15px;
+      border-radius: 15px;
+      background: #112b3c;
+      border: 2px solid #00eaff55;
+      color: white;
+      font-family: 'Courier New', monospace;
+      font-size: 1rem;
+      margin: 20px 0;
+      resize: vertical;
+    }
+
+    .analysis-container {
+      background: rgba(60, 24, 17, 0.8);
+      border-radius: 15px;
+      padding: 20px;
+      margin-top: 25px;
+      border: 1px solid #00eaff33;
+    }
+
+    .analysis-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      margin-top: 10px;
+    }
+
+    .analysis-box {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #00eaff44;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .output-container {
+      background: rgba(17, 43, 60, 0.8);
+      border-radius: 15px;
+      padding: 20px;
+      margin-top: 25px;
+      border: 1px solid #00eaff33;
+    }
+
+    .success {
+      color: #00ffaa;
+    }
+
+    .error {
+      color: #ff5555;
+    }
+
+    #listeningIndicator {
+      display: none;
+      color: #00eaff;
+      text-align: center;
+      margin: 10px 0;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 0.6; }
+      50% { opacity: 1; }
+      100% { opacity: 0.6; }
+    }
+
+    @media (max-width: 1200px) {
+      body { flex-direction: column; align-items: center; }
+      spline-viewer {
+        position: relative;
+        margin: 20px auto;
+        transform: none;
+      }
+      .frame { margin-left: 0; width: 95%; }
+    }
+  </style>
+</head>
+<body>
+  <spline-viewer url="https://prod.spline.design/PeiLMt1b0W0Vj2l5/scene.splinecode"></spline-viewer>
+
+  <div class="frame">
+    <h1>🌟 AI-Powered Speech-to-Code 🌟</h1>
+    
+    <div class="controls">
+      <button id="startBtn">🎙️ Start Listening</button>
+      <button id="stopBtn" disabled>🛑 Stop</button>
+      <button id="runBtn">▶️ Run Code</button>
+    </div>
+
+    <div id="listeningIndicator">🎤 Listening...</div>
+
+    <div class="language-selector-container">
+      <select id="language">
+        <option value="python">Python</option>
+        <option value="javascript">JavaScript</option>
+        <option value="java">Java</option>
+        <option value="c">C</option>
+        <option value="cpp">C++</option>
+      </select>
+    </div>
+
+    <textarea id="codeArea" placeholder="Speak or type your code..."></textarea>
+
+    <div class="analysis-container">
+      <div class="analysis-grid">
+        <div class="analysis-box">
+          <h3>KEYWORDS</h3>
+          <div id="keywordsList"></div>
+        </div>
+        <div class="analysis-box">
+          <h3>IDENTIFIERS</h3>
+          <div id="identifiersList"></div>
+        </div>
+        <div class="analysis-box">
+          <h3>SYNTAX TREE</h3>
+          <pre id="syntaxTree"></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="output-container">
+      <h4>Output:</h4>
+      <div id="outputArea"></div>
+    </div>
+  </div>
+
+  <script type="module" src="https://unpkg.com/@splinetool/viewer@1.9.96/build/spline-viewer.js"></script>
+  
+  <script>
+    const codeArea = document.getElementById('codeArea');
+    const outputArea = document.getElementById('outputArea');
+    const startBtn = document.getElementById('startBtn');
+    const stopBtn = document.getElementById('stopBtn');
+    const runBtn = document.getElementById('runBtn');
+    const listeningIndicator = document.getElementById('listeningIndicator');
+    const languageSelector = document.getElementById('language');
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    let recognition;
+
+    
+    const keywordMap = {
+      python: new Set(['False','None','True','and','as','assert','async','await',
+        'break','class','continue','def','del','elif','else','except',
+        'finally','for','from','global','if','import','in','is','lambda',
+        'nonlocal','not','or','pass','raise','return','try','while','with','yield']),
+      javascript: new Set(['break','case','catch','class','const','continue','debugger',
+        'default','delete','do','else','export','extends','finally','for',
+        'function','if','import','in','instanceof','new','return','super',
+        'switch','this','throw','try','typeof','var','void','while','with','yield']),
+      java: new Set(['abstract','assert','boolean','break','byte','case','catch',
+        'char','class','const','continue','default','do','double','else',
+        'enum','extends','final','finally','float','for','goto','if',
+        'implements','import','instanceof','int','interface','long','native',
+        'new','package','private','protected','public','return','short',
+        'static','strictfp','super','switch','synchronized','this','throw',
+        'throws','transient','try','void','volatile','while']),
+      c: new Set(['auto','break','case','char','const','continue','default',
+        'do','double','else','enum','extern','float','for','goto','if',
+        'int','long','register','return','short','signed','sizeof','static',
+        'struct','switch','typedef','union','unsigned','void','volatile','while']),
+      cpp: new Set(['alignas','alignof','and','and_eq','asm','auto','bitand',
+        'bitor','bool','break','case','catch','char','char8_t','char16_t',
+        'char32_t','class','compl','concept','const','consteval','constexpr',
+        'const_cast','continue','co_await','co_return','co_yield','decltype',
+        'default','delete','do','double','dynamic_cast','else','enum',
+        'explicit','export','extern','false','float','for','friend','goto'])
+    };
+
+    function analyzeCode(code, language) {
+      const keywords = new Set();
+      const identifiers = new Set();
+      const syntaxStructure = [];
+
+     
+      const tokens = code.match(/[a-zA-Z_]\w*|[=+\-*/%<>!&|^~]=?|&&|\|\||<<|>>|::|\.\.\.|\.|,|;|:|\?|\(|\)|\[|\]|{|}|".*?"|'.*?'/g) || [];
+
+      tokens.forEach(token => {
+        if (keywordMap[language]?.has(token)) {
+          keywords.add(token);
+        } else if (/^[a-zA-Z_]/.test(token)) {
+          identifiers.add(token);
+        }
+      });
+
+      
+      const structurePatterns = {
+        function: /(def|function)\s+([a-zA-Z_]\w*)\s*\(/g,
+        class: /class\s+([a-zA-Z_]\w*)/g,
+        loop: /(for|while)\s*\(/g,
+        condition: /(if|else\s+if|elif|else)\s*\(?/g,
+        variable: /(let|const|var)\s+([a-zA-Z_]\w*)/g
+      };
+
+      for (const [type, pattern] of Object.entries(structurePatterns)) {
+        let match;
+        while ((match = pattern.exec(code)) !== null) {
+          syntaxStructure.push({
+            type,
+            name: match[2] || match[1],
+            line: code.substring(0, match.index).split('\n').length
+          });
+        }
+      }
+
+      document.getElementById('keywordsList').textContent = Array.from(keywords).join(', ');
+      document.getElementById('identifiersList').textContent = Array.from(identifiers).join(', ');
+      document.getElementById('syntaxTree').textContent = syntaxStructure
+        .map(entry => `${entry.type.padEnd(10)} ${entry.name} (line ${entry.line})`)
+        .join('\n');
+    }
+
+    function initSpeechRecognition() {
+      if (!SpeechRecognition) {
+        outputArea.textContent = "Speech API not supported in this browser.";
+        outputArea.className = "error";
+        startBtn.disabled = true;
+        return;
+      }
+
+      recognition = new SpeechRecognition();
+      recognition.continuous = true;
+      recognition.interimResults = true;
+      recognition.lang = 'en-US';
+
+      recognition.onstart = () => {
+        startBtn.disabled = true;
+        stopBtn.disabled = false;
+        listeningIndicator.style.display = 'block';
+      };
+
+      recognition.onend = () => {
+        startBtn.disabled = false;
+        stopBtn.disabled = true;
+        listeningIndicator.style.display = 'none';
+      };
+
+      recognition.onresult = async (event) => {
+        let interim = '', final = '';
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          const transcript = event.results[i][0].transcript;
+          if (event.results[i].isFinal) final += transcript;
+          else interim += transcript;
+        }
+        if (interim) codeArea.placeholder = "Listening: " + interim;
+        if (final) {
+          codeArea.value = final;
+          await generateCode(final);
+        }
+      };
+
+      recognition.onerror = (event) => {
+        outputArea.textContent = `Speech recognition error: ${event.error}`;
+        outputArea.className = "error";
+        startBtn.disabled = false;
+        stopBtn.disabled = true;
+        listeningIndicator.style.display = 'none';
+      };
+    }
+
+    async function generateCode(prompt) {
+      outputArea.textContent = "Generating code...";
+      outputArea.className = "";
+      try {
+        const response = await fetch('http://localhost:5000/generate-code', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            prompt: prompt,
+            language: languageSelector.value
+          })
+        });
+        const data = await response.json();
+        if (data.code) {
+          codeArea.value = data.code;
+          outputArea.textContent = "Code generated successfully!";
+          outputArea.className = "success";
+          analyzeCode(data.code, languageSelector.value);
+        } else {
+          throw new Error(data.error || "No code generated");
+        }
+      } catch (error) {
+        outputArea.textContent = `Error: ${error.message}`;
+        outputArea.className = "error";
+      }
+    }
+
+    async function runCode() {
+      const code = codeArea.value.trim();
+      if (!code) {
+        outputArea.textContent = "No code to execute";
+        outputArea.className = "error";
+        return;
+      }
+
+      outputArea.textContent = "Running code...";
+      outputArea.className = "";
+      try {
+        const response = await fetch('http://localhost:5000/execute', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            code: code,
+            language: languageSelector.value
+          })
+        });
+        const data = await response.json();
+        outputArea.textContent = data.output || "No output";
+        outputArea.className = data.status === "success" ? "success" : "error";
+      } catch (error) {
+        outputArea.textContent = `Failed to execute: ${error.message}`;
+        outputArea.className = "error";
+      }
+    }
+
+    // Event Listeners
+    startBtn.addEventListener('click', () => {
+      if (!recognition) initSpeechRecognition();
+      try {
+        recognition.start();
+      } catch (error) {
+        outputArea.textContent = `Error starting recognition: ${error.message}`;
+        outputArea.className = "error";
+      }
+    });
+    stopBtn.addEventListener('click', () => {
+      try {
+        recognition.stop();
+      } catch (error) {
+        outputArea.textContent = `Error stopping recognition: ${error.message}`;
+        outputArea.className = "error";
+      }
+    });
+    runBtn.addEventListener('click', runCode);
+    codeArea.addEventListener('input', () => analyzeCode(codeArea.value, languageSelector.value));
+    languageSelector.addEventListener('change', () => analyzeCode(codeArea.value, languageSelector.value));
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initSpeechRecognition();
+      analyzeCode(codeArea.value, languageSelector.value);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Channels to Learn</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Gradient Voileth background */
+    body {
+      background: linear-gradient(135deg, #7f00ff 0%, #e100ff 100%);
+      min-height: 100vh;
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: white;
+    }
+
+    h1 {
+      font-weight: 900;
+      font-size:5rem;
+      text-align: center;
+      margin-bottom: 2rem;
+      text-shadow:
+        0 0 10px rgba(255, 0, 255, 0.7),
+        0 0 20px rgba(255, 0, 255, 0.7);
+    }
+
+    .channels-row {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: nowrap;
+      margin-bottom: 2rem;
+    }
+
+    .channel {
+      position: relative;
+      cursor: pointer;
+      overflow: hidden;
+      border-radius: 0.75rem;
+      box-shadow:
+        0 4px 15px rgba(255, 0, 255, 0.5),
+        0 6px 20px rgba(0, 0, 0, 0.4);
+      transform-style: preserve-3d;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      width: 280px;
+      height: 160px;
+      background: #111;
+    }
+
+    .channel img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 0.75rem;
+      display: block;
+      filter: brightness(0.85);
+      transition: filter 0.3s ease;
+      user-select: none;
+      pointer-events: none;
+    }
+
+    .channel:hover {
+      transform: scale(1.1) rotateY(12deg) rotateX(8deg);
+      box-shadow:
+        0 8px 40px rgba(255, 0, 255, 0.7),
+        0 12px 60px rgba(0, 0, 0, 0.6);
+      z-index: 10;
+    }
+
+    .channel:hover img {
+      filter: brightness(1);
+    }
+
+    footer {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.2);
+      padding: 1rem 0;
+      position: fixed;
+      bottom: 0;
+      display: flex;
+      justify-content: center;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 -1px 15px rgba(255, 0, 255, 0.5);
+      z-index: 100;
+    }
+
+    button.back-btn {
+      background: linear-gradient(45deg, #e100ff, #7f00ff);
+      border: none;
+      color: white;
+      padding: 0.7rem 2rem;
+      font-size: 1.25rem;
+      border-radius: 50px;
+      font-weight: 700;
+      box-shadow:
+        0 4px 10px #e100ff88,
+        0 0 20px #7f00ffcc;
+      cursor: pointer;
+      transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+    }
+
+    button.back-btn:hover {
+      transform: scale(1.15) rotate(-10deg);
+      box-shadow:
+        0 0 30px #e100ffee,
+        0 0 40px #7f00ffee,
+        0 0 50px #ff33ffee;
+    }
+
+    button.back-btn:active {
+      transform: scale(1) rotate(0deg);
+      box-shadow:
+        0 4px 10px #e100ffaa,
+        0 0 20px #7f00ffcc;
+    }
+  </style>
+</head>
+<body>
+  <h1 class="text-6xl font-extrabold text-center mb-8 drop-shadow-lg">Channels to Learn</h1>
+
+<a href="https://youtube.com/playlist?list=PLSwH4ViBDl2Q0wKsbas5e9FEpWMOPo0P9&si=zx1Stev3xfk3D9za" target="_blank">
+  <div class="channels-row" role="list">
+    <div class="channel" role="listitem" tabindex="0" aria-label="Compiler Playlist" onclick="animateClick(this)">
+      <img src="Screenshot 2025-06-24 074055.png" alt="Compiler Playlist" />
+    </div>
+</a>
+
+<a href="https://youtube.com/playlist?list=PLv8Cp2NvcY8AzNCATbDWMr8vqbJBYbxFW&si=WqQAX6gk6Z1JGmUb" target="_blank">
+    <div class="channel" role="listitem" tabindex="0" aria-label="Compiler Playlist" onclick="animateClick(this)">
+      <img src="Screenshot 2025-06-24 074201.png" alt="Compiler Playlist" />
+    </div>
+</a>
+
+<a href="https://youtube.com/playlist?list=PLM3lhmHjSeISyMURtxc1-ibN1DrB_3sFK&si=2VYB18QbZxV1ke0r" target="_blank">
+    <div class="channel" role="listitem" tabindex="0" aria-label="Compiler Playlist" onclick="animateClick(this)">
+      <img src="Screenshot 2025-06-24 074229.png" alt="Compiler Playlist" />
+    </div>
+  </div>
+</a>
+
+<a href="https://youtube.com/playlist?list=PLwgd2h1X_NbvvnZp1LRlRw1_rXikPWEpI&si=KKoLOWVAO7mKNfkf" target="_blank">
+  <div class="channels-row" role="list">
+    <div class="channel" role="listitem" tabindex="0" aria-label="Compiler Playlist" onclick="animateClick(this)">
+      <img src="Screenshot 2025-06-24 074258.png" alt="Compiler Playlist" />
+    </div>
+</a>
+
+<a href="https://youtube.com/playlist?list=PLu0W_9lII9agq5TrH9XLIKQvv0iaF2X3w&si=6T5LrDvBPpJqM_Hs" target="_blank">
+    <div class="channel" role="listitem" tabindex="0" aria-label="Compiler Playlist" onclick="animateClick(this)">
+      <img src="Screenshot 2025-06-24 074332.png" alt="Compiler Playlist" />
+    </div>
+  </div>
+</a>
+  <footer>
+    <button class="back-btn" aria-label="Go back" onclick="onBackClick()">Back</button>
+  </footer>
+
+  <script>
+    // Animate click on image boxes
+    function animateClick(el) {
+      el.style.transition = 'transform 0.15s ease';
+      el.style.transform += ' scale(0.9)';
+      setTimeout(() => {
+        el.style.transform = el.style.transform.replace(' scale(0.9)', '');
+      }, 150);
+    }
+
+    // Back button animation + action
+    function onBackClick() {
+      const btn = document.querySelector('button.back-btn');
+      btn.style.transition = 'transform 0.2s ease';
+      btn.style.transform = 'scale(1.1) rotate(-10deg)';
+      setTimeout(() => {
+        btn.style.transform = 'scale(1) rotate(0deg)';
+        // Action for Back button: go back in history if possible
+        if(window.history.length > 1) {
+          window.history.back();
+        } else {
+          alert('No history to go back.');
+        }
+      }, 200);
+    }
+
+    // Add keyboard accessibility for channel divs (Enter triggers click)
+    document.querySelectorAll('.channel').forEach(ch => {
+      ch.addEventListener('keydown', (e) => {
+        if(e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          ch.click();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
+

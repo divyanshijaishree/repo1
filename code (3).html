@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Support 24/7</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background: linear-gradient(135deg, #7F00FF, #E100FF);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: white;
+  }
+  h1.title {
+    font-size: 3.5rem;
+    font-weight: 900;
+    text-align: center;
+    padding: 2rem 1rem 3rem;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    user-select: none;
+  }
+  .profiles-container {
+    max-width: 1200px;
+    margin: 0 auto 100px auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 3rem 5rem;
+  }
+  .profile {
+    background: white;
+    max-width: 450px;
+    width: 100%;
+    border-radius: 0.5rem;
+    color: #222;
+    display: flex;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+    overflow: hidden;
+    animation: fade-in-up 1s ease forwards;
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  .profile:nth-child(1) { animation-delay: 0.1s; }
+  .profile:nth-child(2) { animation-delay: 0.3s; }
+  .profile:nth-child(3) { animation-delay: 0.5s; }
+  .profile:nth-child(4) { animation-delay: 0.7s; }
+
+  /* Left color label vertical */
+  .label {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    position: relative;
+    background: purple;
+    padding: 0.7rem 1rem;
+    font-weight: 600;
+    color: white;
+    font-size: 1.05rem;
+    border-top-left-radius: 0.75rem;
+    border-bottom-left-radius: 0.75rem;
+    user-select: none;
+    flex-shrink: 0;
+    box-shadow: 1px 0 5px rgba(0,0,0,0.15);
+  }
+  .label.divyanshi { background: #bb6bd9; }
+  .label.gaurav { background: #fb923c; }
+  .label.karan { background: #22d3ee; }
+  .label.vaibhav { background: #ec4899; }
+
+  .info {
+    flex: 1;
+    padding: 2.5rem 2rem 2.5rem 2rem;
+  }
+  .info img {
+    width: 180px;
+    height: 220px;
+    object-fit: cover;
+    box-shadow: 0 10px 15px rgba(0,0,0,0.2);
+    border-radius: 0;
+    margin-right: 1.5rem;
+    flex-shrink: 0;
+    transform-style: preserve-3d;
+    animation: swing 3s ease-in-out infinite alternate;
+    filter: drop-shadow(0 4px 4px rgba(0,0,0,0.15));
+  }
+  .profile-content {
+    display: flex;
+    flex: 1;
+    align-items: center;
+  }
+  .content-text h2 {
+    margin: 0 0 0.3rem 0;
+    font-size: 2rem;
+    font-weight: 900;
+  }
+  .content-text em {
+    display: block;
+    font-style: italic;
+    font-weight: 400;
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+    color: #444;
+  }
+  .content-text strong {
+    font-size: 1.25rem;
+    color: #111;
+  }
+  .content-text p {
+    margin: 0.7rem 0 0 0;
+    font-size: 1.1rem;
+    line-height: 1.5;
+    color: #333;
+  }
+
+  @keyframes fade-in-up {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes swing {
+    0%   { transform: rotate(2deg); }
+    100% { transform: rotate(-2deg); }
+  }
+
+  footer {
+    position: fixed;
+    bottom: 1.7rem;
+    width: 100%;
+    text-align: center;
+    z-index: 10;
+  }
+
+  button.back-btn {
+    background: transparent;
+    border: 2px solid white;
+    border-radius: 50px;
+    padding: 0.7rem 2rem;
+    color: white;
+    font-size: 1.2rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    user-select: none;
+    position: relative;
+    overflow: hidden;
+  }
+  button.back-btn:hover {
+    background: white;
+    color: #7F00FF;
+    box-shadow: 0 8px 24px rgba(255,255,255,0.8);
+  }
+  button.back-btn::before {
+    content: "⬅";
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%) translateX(-20px);
+    opacity: 0;
+    transition: all 0.4s ease;
+    font-size: 1.3rem;
+  }
+  button.back-btn:hover::before {
+    transform: translateY(-50%) translateX(0);
+    opacity: 1;
+  }
+
+  /* Responsive */
+  @media (max-width: 600px){
+    .profiles-container {
+      gap: 2rem;
+    }
+    .profile {
+      flex-direction: column;
+      max-width: 320px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    }
+    .label {
+      writing-mode: horizontal-tb;
+      padding: 0.4rem 1rem;
+      border-radius: 10px 10px 0 0;
+      font-size: 1rem;
+      margin-bottom: 0.8rem;
+      box-shadow: none;
+    }
+    .profile-content {
+      display: block;
+    }
+    .info img {
+      margin: 0 auto 1rem auto;
+      animation: swing 3s ease-in-out infinite alternate;
+    }
+    .content-text h2 {
+      font-size: 1.6rem;
+    }
+  }
+</style>
+</head>
+<body>
+  <h1 class="title" aria-label="Support 24/7">SUPPORT 24/7</h1>
+
+  <main class="profiles-container" role="main" aria-live="polite">
+    <!-- Profile 1: Divyanshi -->
+    <section class="profile" aria-labelledby="divyanshi-label">
+      <div class="label divyanshi" id="divyanshi-label">Divyanshi</div>
+      <div class="profile-content">
+        <img src="Screenshot 2025-06-22 191428.png" alt="Divyanshi" />
+        <div class="content-text">
+          <h2>Hello, I’m Divyanshi</h2>
+          <em>divyanshikunwar0@gmail.com</em>
+          <strong>Leader of DGV Team</strong>
+          <p>B.Tech student and real-world problems solver</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Profile 2: Gaurav -->
+    <section class="profile" aria-labelledby="gaurav-label">
+      <div class="label gaurav" id="gaurav-label">Gaurav</div>
+      <div class="profile-content">
+        <img src="Screenshot 2025-06-22 191748.png" alt="Gaurav" />
+        <div class="content-text">
+          <h2>Hello, I’m Gaurav</h2>
+          <em>gauravxy2005@gmail.com</em>
+          <strong>Member of DGV Team</strong>
+          <p>B.Tech student, web designing and web developer expert</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Profile 4: Vaibhav -->
+    <section class="profile" aria-labelledby="vaibhav-label">
+      <div class="label vaibhav" id="vaibhav-label">Vaibhav</div>
+      <div class="profile-content">
+        <img src="Screenshot 2025-06-22 192345.png" alt="Vaibhav" />
+        <div class="content-text">
+          <h2>Hello, I’m Vaibhav</h2>
+          <em>negiv2491@gmail.com</em>
+          <strong>Member of DGV Team</strong>
+          <p>I am focused on applying my skills to logical thinking challenges.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <button class="back-btn" aria-label="Go back to previous page" onclick="history.back()">Back</button>
+  </footer>
+</body>
+</html>
+
